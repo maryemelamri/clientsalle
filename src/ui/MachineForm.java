@@ -154,6 +154,11 @@ public class MachineForm extends javax.swing.JInternalFrame {
         });
 
         bnDelete.setText("Supprimer");
+        bnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -281,6 +286,19 @@ public class MachineForm extends javax.swing.JInternalFrame {
     private void machinesListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_machinesListMouseClicked
         ObjetMouseClicked(evt);
     }//GEN-LAST:event_machinesListMouseClicked
+
+    private void bnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnDeleteActionPerformed
+   int reponse = JOptionPane.showConfirmDialog(this, "vous voulez vraiment supprimé cette ligne?");
+        if (reponse==0){
+       try {
+           dao.delete(dao.findById(id));
+           JOptionPane.showMessageDialog(this, "votre ligne a ete supprimée");
+            load();
+       } catch (RemoteException ex) {
+           Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        }    
+    }//GEN-LAST:event_bnDeleteActionPerformed
    private void ObjetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listeClientMouseClicked
         id= Integer.parseInt(model.getValueAt(machinesList.getSelectedRow(),0).toString());
        txtRef.setText(model.getValueAt(machinesList.getSelectedRow(),1).toString());

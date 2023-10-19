@@ -7,6 +7,7 @@ package Client;
 
 import dao.IDao;
 import entities.Machine;
+import entities.Salle;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -27,7 +28,10 @@ public class Client {
             ms.create(new Machine("RE44", "HP", 2000));
             ms.create(new Machine("RE54", "DELL", 5000));
             ms.create(new Machine("RE74", "LENOV", 6000));
-
+               IDao<Salle> ss =  (IDao<Salle>) Naming.lookup("rmi://" + Config.ip + ":" + Config.port + "/" + "dao");
+            for (Salle s : ss.findAll()) {
+                System.out.println(s);
+            }
             for (Machine m : ms.findAll()) {
                 System.out.println(m);
             }
