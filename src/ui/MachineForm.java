@@ -13,6 +13,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import utils.Config;
 
@@ -21,7 +22,7 @@ import utils.Config;
  * @author Lachgar
  */
 public class MachineForm extends javax.swing.JInternalFrame {
-
+    private static int id;
     IDao<Machine> dao;
     DefaultTableModel model;
 
@@ -146,6 +147,11 @@ public class MachineForm extends javax.swing.JInternalFrame {
         });
 
         bnUpdate.setText("Modifier");
+        bnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bnUpdateActionPerformed(evt);
+            }
+        });
 
         bnDelete.setText("Supprimer");
 
@@ -184,6 +190,11 @@ public class MachineForm extends javax.swing.JInternalFrame {
                 "ID", "Ref", "Marque", "Prix"
             }
         ));
+        machinesList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                machinesListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(machinesList);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -242,7 +253,42 @@ public class MachineForm extends javax.swing.JInternalFrame {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bnAddActionPerformed
+//update section
+    private void bnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnUpdateActionPerformed
+         String ref = txtRef.getText();
+        String marque = txtMarque.getText();
+        Double prix = Double.parseDouble(txtPrix.getText().toString()) ;
+        try {
+            Machine machine = dao.findById(id);
+            machine.setMarque(marque);
+            machine.setPrix(prix);
+            machine.setRef(ref);
+            if (dao.update(machine)){
+                      JOptionPane.showMessageDialog(this, "votre ligne à été modofié");
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       /* Categorie cat = Cats.findById(id);
+        cat.setCode(code);cat.setLibelle(libelle);
+        if(Cats.update(cat)){
+            JOptionPane.showMessageDialog(this, "votre ligne à été modofié");
+        }*/
+        load();
+    }//GEN-LAST:event_bnUpdateActionPerformed
 
+    private void machinesListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_machinesListMouseClicked
+        ObjetMouseClicked(evt);
+    }//GEN-LAST:event_machinesListMouseClicked
+   private void ObjetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listeClientMouseClicked
+        id= Integer.parseInt(model.getValueAt(machinesList.getSelectedRow(),0).toString());
+       txtRef.setText(model.getValueAt(machinesList.getSelectedRow(),1).toString());
+       txtMarque.setText(model.getValueAt(machinesList.getSelectedRow(),2).toString());
+       txtPrix.setText(model.getValueAt(machinesList.getSelectedRow(),3).toString());
+        //jTextField2_code.setText(Tmodel.getValueAt(listeClient.getSelectedRow(),1).toString());
+       // jTextField3_libelle.setText(Tmodel.getValueAt(listeClient.getSelectedRow(),2).toString());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bnAdd;
