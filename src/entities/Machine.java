@@ -16,6 +16,19 @@ public class Machine  implements Serializable{
     public Machine() {
     }
 
+
+    private Salle salle;
+ 
+
+
+    public Machine(String ref, String marque, double prix, Salle salle) {
+        this.ref = ref;
+        this.marque = marque;
+        this.prix = prix;
+        this.salle = salle;
+    }
+  
+
     public Machine(String ref, String marque, double prix) {
         this.ref = ref;
         this.marque = marque;
@@ -58,7 +71,17 @@ public class Machine  implements Serializable{
     public String toString() {
         return "Machine{" + "id=" + id + ", ref=" + ref + ", marque=" + marque + ", prix=" + prix + '}';
     }
-     
-     
-    
+
+    /**
+     * @return the salle
+     */
+    public Salle getSalle() {
+        return salle;
+    }
+
+
+    public void setSalle(Salle salle) {
+        this.salle = salle;
+    }
+
 }

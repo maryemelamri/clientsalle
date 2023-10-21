@@ -7,7 +7,6 @@ package ui;
 
 import dao.IDao;
 import entities.Machine;
-import entities.Salle;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -22,35 +21,26 @@ import utils.Config;
  *
  * @author Lachgar
  */
-public class MachineForm extends javax.swing.JInternalFrame {
-
+public class ClientForm extends javax.swing.JInternalFrame {
     private static int id;
     IDao<Machine> dao;
-    IDao<Salle> daoS;
     DefaultTableModel model;
-
-    private void LoadSalles() throws RemoteException {
-        for (Salle S : daoS.findAll()) {
-            txtsalle.addItem(S.toString());
-        }
-    }
 
     /**
      * Creates new form MachineForm
      */
-    public MachineForm() {
+    public ClientForm() {
         try {
             initComponents();
-            LoadSalles();
             dao = (IDao<Machine>) Naming.lookup("rmi://" + Config.ip + ":" + Config.port + "/" + "dao");
             model = (DefaultTableModel) machinesList.getModel();
             load();
         } catch (NotBoundException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -63,13 +53,12 @@ public class MachineForm extends javax.swing.JInternalFrame {
                     m.getId(),
                     m.getRef(),
                     m.getMarque(),
-                    m.getPrix(),
-                    m.getSalle()
-
+                    m.getPrix()
+                        
                 });
             }
         } catch (RemoteException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -89,8 +78,6 @@ public class MachineForm extends javax.swing.JInternalFrame {
         txtRef = new javax.swing.JTextField();
         txtMarque = new javax.swing.JTextField();
         txtPrix = new javax.swing.JTextField();
-        txtsalle = new javax.swing.JComboBox<>();
-        lbal = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         bnAdd = new javax.swing.JButton();
         bnUpdate = new javax.swing.JButton();
@@ -115,10 +102,6 @@ public class MachineForm extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Prix : ");
 
-        txtsalle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        lbal.setText("Salle :");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -128,11 +111,9 @@ public class MachineForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(lbal))
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtsalle, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtRef)
                     .addComponent(txtMarque)
                     .addComponent(txtPrix, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
@@ -149,15 +130,11 @@ public class MachineForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtMarque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtsalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbal))
-                .addGap(26, 26, 26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtPrix, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -274,35 +251,32 @@ public class MachineForm extends javax.swing.JInternalFrame {
             // TODO add your handling code here:
             String ref = txtRef.getText().toString();
             String marque = txtMarque.getText().toString();
-            double prix = Double.parseDouble(txtPrix.getText().toString());
-            Salle salle = (Salle) txtsalle.getSelectedItem();
-
+            double prix  = Double.parseDouble(txtPrix.getText().toString());
+            
             dao.create(new Machine(ref, marque, prix));
             load();
         } catch (RemoteException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bnAddActionPerformed
 //update section
     private void bnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnUpdateActionPerformed
-        String ref = txtRef.getText();
+         String ref = txtRef.getText();
         String marque = txtMarque.getText();
-        Double prix = Double.parseDouble(txtPrix.getText().toString());
-        Salle salle = (Salle) txtsalle.getSelectedItem();
+        Double prix = Double.parseDouble(txtPrix.getText().toString()) ;
         try {
             Machine machine = dao.findById(id);
             machine.setMarque(marque);
             machine.setPrix(prix);
             machine.setRef(ref);
-            machine.setSalle(salle);
-            if (dao.update(machine)) {
-                JOptionPane.showMessageDialog(this, "votre ligne à été modofié");
+            if (dao.update(machine)){
+                      JOptionPane.showMessageDialog(this, "votre ligne à été modofié");
             }
-
+            
         } catch (RemoteException ex) {
-            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /* Categorie cat = Cats.findById(id);
+       /* Categorie cat = Cats.findById(id);
         cat.setCode(code);cat.setLibelle(libelle);
         if(Cats.update(cat)){
             JOptionPane.showMessageDialog(this, "votre ligne à été modofié");
@@ -315,26 +289,24 @@ public class MachineForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_machinesListMouseClicked
 
     private void bnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnDeleteActionPerformed
-        int reponse = JOptionPane.showConfirmDialog(this, "vous voulez vraiment supprimé cette ligne?");
-        if (reponse == 0) {
-            try {
-                dao.delete(dao.findById(id));
-                JOptionPane.showMessageDialog(this, "votre ligne a ete supprimée");
-                load();
-            } catch (RemoteException ex) {
-                Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+   int reponse = JOptionPane.showConfirmDialog(this, "vous voulez vraiment supprimé cette ligne?");
+        if (reponse==0){
+       try {
+           dao.delete(dao.findById(id));
+           JOptionPane.showMessageDialog(this, "votre ligne a ete supprimée");
+            load();
+       } catch (RemoteException ex) {
+           Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        }    
     }//GEN-LAST:event_bnDeleteActionPerformed
-    private void ObjetMouseClicked(java.awt.event.MouseEvent evt) {
-        id = Integer.parseInt(model.getValueAt(machinesList.getSelectedRow(), 0).toString());
-        txtRef.setText(model.getValueAt(machinesList.getSelectedRow(), 1).toString());
-        txtMarque.setText(model.getValueAt(machinesList.getSelectedRow(), 2).toString());
-        txtPrix.setText(model.getValueAt(machinesList.getSelectedRow(), 3).toString());
-        txtsalle.getModel().setSelectedItem(model.getValueAt(machinesList.getSelectedRow(), 4));
-
+   private void ObjetMouseClicked(java.awt.event.MouseEvent evt) {                                         
+        id= Integer.parseInt(model.getValueAt(machinesList.getSelectedRow(),0).toString());
+       txtRef.setText(model.getValueAt(machinesList.getSelectedRow(),1).toString());
+       txtMarque.setText(model.getValueAt(machinesList.getSelectedRow(),2).toString());
+       txtPrix.setText(model.getValueAt(machinesList.getSelectedRow(),3).toString());
         //jTextField2_code.setText(Tmodel.getValueAt(listeClient.getSelectedRow(),1).toString());
-        // jTextField3_libelle.setText(Tmodel.getValueAt(listeClient.getSelectedRow(),2).toString());
+       // jTextField3_libelle.setText(Tmodel.getValueAt(listeClient.getSelectedRow(),2).toString());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -348,11 +320,9 @@ public class MachineForm extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbal;
     private javax.swing.JTable machinesList;
     private javax.swing.JTextField txtMarque;
     private javax.swing.JTextField txtPrix;
     private javax.swing.JTextField txtRef;
-    private javax.swing.JComboBox<String> txtsalle;
     // End of variables declaration//GEN-END:variables
 }

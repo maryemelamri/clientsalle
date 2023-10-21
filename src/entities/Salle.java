@@ -6,12 +6,14 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
+import entities.Machine;
 
 public class Salle implements Serializable{
 
      private int id;
      private String code;
-    
+       private List<Machine> machines; 
 
     public Salle() {
     }
@@ -20,7 +22,7 @@ public class Salle implements Serializable{
         this.code = code;
    
     }
-
+     
     public int getId() {
         return id;
     }
@@ -41,6 +43,20 @@ public class Salle implements Serializable{
     @Override
     public String toString() {
         return "Salle{" + "id=" + id + ", code=" + code +  '}';
+    }
+
+    /**
+     * @return the machines
+     */
+    public List<Machine> getMachines() {
+        return machines;
+    }
+
+    /**
+     * @param machines the machines to set
+     */
+    public void setMachines(List<Machine> machines) {
+        this.machines = machines;
     }
      
      
