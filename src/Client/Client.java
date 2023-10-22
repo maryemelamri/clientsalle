@@ -24,17 +24,23 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            IDao<Machine> ms = (IDao<Machine>) Naming.lookup("rmi://" + Config.ip + ":" + Config.port + "/" + "dao");
-            ms.create(new Machine("RE44", "HP", 2000));
-            ms.create(new Machine("RE54", "DELL", 5000));
-            ms.create(new Machine("RE74", "LENOV", 6000));
-               IDao<Salle> ss =  (IDao<Salle>) Naming.lookup("rmi://" + Config.ip + ":" + Config.port + "/" + "dao");
-            for (Salle s : ss.findAll()) {
-                System.out.println(s);
-            }
-            for (Machine m : ms.findAll()) {
+            IDao<Machine> ms = (IDao<Machine>) Naming.lookup("rmi://localhost:1090/daomachine");
+                        IDao<Salle> ss =  (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle");;
+
+            
+           
+            ms.create(new Machine("RE44", "HP", 2000,ss.findById(0)));
+   
+             
+           // IDao<Salle> ss =  (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle");;
+            ss.create(new Salle("Cd512"));
+           
+            for(Machine m : ms.findAll())
                 System.out.println(m);
-            }
+            
+            for(Salle s : ss.findAll())
+                System.out.println(s);
+ 
 
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

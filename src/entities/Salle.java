@@ -13,7 +13,6 @@ public class Salle implements Serializable{
 
      private int id;
      private String code;
-       private List<Machine> machines; 
 
     public Salle() {
     }
@@ -45,20 +44,6 @@ public class Salle implements Serializable{
         return "Salle{" + "id=" + id + ", code=" + code +  '}';
     }
 
-    /**
-     * @return the machines
-     */
-    public List<Machine> getMachines() {
-        return machines;
-    }
 
-    /**
-     * @param machines the machines to set
-     */
-    public void setMachines(List<Machine> machines) {
-        this.machines = machines;
-    }
-     
-     
     
 }

@@ -7,32 +7,23 @@ package entities;
 
 import java.io.Serializable;
 
-public class Machine  implements Serializable{
-     private int id;
-     private String ref;
-     private String marque;
-     private double prix;
+public class Machine implements Serializable {
+
+    private int id;
+    private String ref;
+    private String marque;
+    private double prix;
+
+    private Salle salle;
 
     public Machine() {
     }
-
-
-    private Salle salle;
- 
-
 
     public Machine(String ref, String marque, double prix, Salle salle) {
         this.ref = ref;
         this.marque = marque;
         this.prix = prix;
         this.salle = salle;
-    }
-  
-
-    public Machine(String ref, String marque, double prix) {
-        this.ref = ref;
-        this.marque = marque;
-        this.prix = prix;
     }
 
     public int getId() {
@@ -67,11 +58,6 @@ public class Machine  implements Serializable{
         this.prix = prix;
     }
 
-    @Override
-    public String toString() {
-        return "Machine{" + "id=" + id + ", ref=" + ref + ", marque=" + marque + ", prix=" + prix + '}';
-    }
-
     /**
      * @return the salle
      */
@@ -79,9 +65,13 @@ public class Machine  implements Serializable{
         return salle;
     }
 
-
     public void setSalle(Salle salle) {
         this.salle = salle;
+    }
+
+    @Override
+    public String toString() {
+        return "Machine{" + "id=" + id + ", ref=" + ref + ", marque=" + marque + ", prix=" + prix + ", salle=" + getSalle() + '}';
     }
 
 }

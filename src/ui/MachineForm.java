@@ -12,6 +12,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,36 +27,37 @@ import utils.Config;
 public class MachineForm extends javax.swing.JInternalFrame {
 
     private static int id;
-    IDao<Machine> dao;
-    IDao<Salle> daoS;
-    DefaultTableModel model;
+    IDao<Machine> dao=null;
+    IDao<Salle> daoS=null;
+    DefaultTableModel model=null;
+    //private IDao<Salle> Ss;
 
-    private void LoadSalles() throws RemoteException {
-        for (Salle S : daoS.findAll()) {
-            txtsalle.addItem(S.toString());
-        }
-    }
 
     /**
      * Creates new form MachineForm
      */
     public MachineForm() {
         try {
-            initComponents();
-            LoadSalles();
-            dao = (IDao<Machine>) Naming.lookup("rmi://" + Config.ip + ":" + Config.port + "/" + "dao");
-            model = (DefaultTableModel) machinesList.getModel();
-            load();
+        initComponents();
+          
+
+            dao = (IDao<Machine>) Naming.lookup("rmi://localhost:1090/daomachine");
+            daoS = (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle");         
+          
+          
         } catch (NotBoundException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            
+        }model = (DefaultTableModel) machinesList.getModel();
+           load(); 
+           LoadSalles();
 
+      
     }
-
     public void load() {
         try {
             model.setRowCount(0);
@@ -64,7 +67,7 @@ public class MachineForm extends javax.swing.JInternalFrame {
                     m.getRef(),
                     m.getMarque(),
                     m.getPrix(),
-                    m.getSalle()
+                    m.getSalle().getcode()
 
                 });
             }
@@ -72,7 +75,18 @@ public class MachineForm extends javax.swing.JInternalFrame {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    public void LoadSalles()  {
+        try {
+            List<Salle> salleList = new ArrayList<>(daoS.findAll());
+            for (Salle s : salleList){
+                txtsalle.addItem(s.getcode());
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -114,8 +128,6 @@ public class MachineForm extends javax.swing.JInternalFrame {
         jLabel2.setText("Marque : ");
 
         jLabel3.setText("Prix : ");
-
-        txtsalle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         lbal.setText("Salle :");
 
@@ -213,10 +225,10 @@ public class MachineForm extends javax.swing.JInternalFrame {
 
         machinesList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Ref", "Marque", "Prix"
+                "ID", "Ref", "Marque", "Prix", "Salle"
             }
         ));
         machinesList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -225,6 +237,10 @@ public class MachineForm extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(machinesList);
+        if (machinesList.getColumnModel().getColumnCount() > 0) {
+            machinesList.getColumnModel().getColumn(2).setHeaderValue("Marque");
+            machinesList.getColumnModel().getColumn(3).setHeaderValue("Prix");
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -277,7 +293,7 @@ public class MachineForm extends javax.swing.JInternalFrame {
             double prix = Double.parseDouble(txtPrix.getText().toString());
             Salle salle = (Salle) txtsalle.getSelectedItem();
 
-            dao.create(new Machine(ref, marque, prix));
+            dao.create(new Machine(ref, marque, prix,salle));
             load();
         } catch (RemoteException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
