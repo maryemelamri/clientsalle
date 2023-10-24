@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package entities;
-
 import java.io.Serializable;
 
 public class Machine implements Serializable {
@@ -25,6 +24,7 @@ public class Machine implements Serializable {
         this.prix = prix;
         this.salle = salle;
     }
+
 
     public int getId() {
         return id;
@@ -58,20 +58,26 @@ public class Machine implements Serializable {
         this.prix = prix;
     }
 
-    /**
-     * @return the salle
-     */
     public Salle getSalle() {
         return salle;
     }
 
-    public void setSalle(Salle salle) {
-        this.salle = salle;
+    public void setPrix(Salle salle) {
+        this.setSalle(salle);
     }
+    
+    
 
     @Override
     public String toString() {
-        return "Machine{" + "id=" + id + ", ref=" + ref + ", marque=" + marque + ", prix=" + prix + ", salle=" + getSalle() + '}';
+        return "Machine{" + "id=" + id + ", ref=" + ref + ", marque=" + marque + ", prix=" + prix +  ", salle=" + getSalle() +'}';
+    }
+
+    /**
+     * @param salle the salle to set
+     */
+    public void setSalle(Salle salle) {
+        this.salle = salle;
     }
 
 }
