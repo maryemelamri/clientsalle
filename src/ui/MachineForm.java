@@ -79,9 +79,9 @@ public class MachineForm extends javax.swing.JInternalFrame {
 
     public void LoadSalles() {
         try {
-            List<Salle> salleList = new ArrayList<>(daoS.findAll());
-            for (Salle s : salleList) {
-                txtsalle.addItem(s.getcode());
+            //List<Salle> salleList = new ArrayList<>(daoS.findAll());
+            for (Salle s : daoS.findAll()) {
+                txtsalle.addItem(s);
             }
         } catch (RemoteException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,7 +105,7 @@ public class MachineForm extends javax.swing.JInternalFrame {
         txtRef = new javax.swing.JTextField();
         txtMarque = new javax.swing.JTextField();
         txtPrix = new javax.swing.JTextField();
-        txtsalle = new javax.swing.JComboBox<>();
+        txtsalle = new javax.swing.JComboBox();
         lbal = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         bnAdd = new javax.swing.JButton();
@@ -288,11 +288,23 @@ public class MachineForm extends javax.swing.JInternalFrame {
             // TODO add your handling code here:
             String ref = txtRef.getText().toString();
             String marque = txtMarque.getText().toString();
-            double prix = Double.parseDouble(txtPrix.getText().toString());
-            Salle salle = (Salle) txtsalle.getSelectedItem();
-
-            dao.create(new Machine(ref, marque, prix, salle));
+            double prix = Double.parseDouble(txtPrix.getText());
+           
+    Salle salle = (Salle) txtsalle.getSelectedItem();
+               System.out.println("salle "+ salle);
+               /*   Salle s= daoS.findById(salle.getId());
+               System.out.println("teeeeest2"+ s);
+               */
+           /* String salleName  =  txtsalle.getSelectedItem().toString();
+           
+           
+           System.out.println("teeeeest"+ salleName);
+           Salle salle =new Salle(salleName);
+           System.out.println(salle.getId());*/
+           dao.create(new Machine(ref, marque, prix,salle));
+           
             load();
+      
         } catch (RemoteException ex) {
             Logger.getLogger(MachineForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,7 +313,7 @@ public class MachineForm extends javax.swing.JInternalFrame {
     private void bnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnUpdateActionPerformed
         String ref = txtRef.getText();
         String marque = txtMarque.getText();
-        Double prix = Double.parseDouble(txtPrix.getText().toString());
+        double prix = Double.parseDouble(txtPrix.getText());
         Salle salle = (Salle) txtsalle.getSelectedItem();
         try {
             Machine machine = dao.findById(id);
@@ -367,6 +379,6 @@ public class MachineForm extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtMarque;
     private javax.swing.JTextField txtPrix;
     private javax.swing.JTextField txtRef;
-    private javax.swing.JComboBox<String> txtsalle;
+    private javax.swing.JComboBox txtsalle;
     // End of variables declaration//GEN-END:variables
 }

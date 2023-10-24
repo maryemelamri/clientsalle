@@ -250,6 +250,7 @@ public class SalleForm extends javax.swing.JInternalFrame {
             String ref = txtRef.getText().toString();
 
             daoS.create(new Salle(ref));
+            System.out.println(new Salle(ref).getId());
             load();
         } catch (RemoteException ex) {
             Logger.getLogger(SalleForm.class.getName()).log(Level.SEVERE, null, ex);
