@@ -7,21 +7,22 @@ package entities;
 
 import java.io.Serializable;
 import java.util.List;
-import entities.Machine;
 
-public class Salle implements Serializable{
+public class Salle implements Serializable {
 
-     private int id;
-     private String code;
+
+    private int id;
+    private String code;
+ 
 
     public Salle() {
     }
 
     public Salle(String code) {
         this.code = code;
-   
+
     }
-     
+ 
     public int getId() {
         return id;
     }
@@ -38,12 +39,10 @@ public class Salle implements Serializable{
         this.code = code;
     }
 
-
     @Override
     public String toString() {
-        return "Salle{" + "id=" + id + ", code=" + code +  '}';
+        return "Salle{" + "id=" + id + ", code=" + code + '}';
     }
-
 
     
 }

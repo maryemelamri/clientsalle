@@ -63,6 +63,7 @@ public class MachineForm extends javax.swing.JInternalFrame {
         try {
             model.setRowCount(0);
             for (Machine m : dao.findAll()) {
+               
                 model.addRow(new Object[]{
                     m.getId(),
                     m.getRef(),

@@ -25,18 +25,29 @@ public class Client {
     public static void main(String[] args) {
         try {
 
-            IDao<Salle> ss = (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle");;
+            IDao<Salle> ss = (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle"); 
             IDao<Machine> ms = (IDao<Machine>) Naming.lookup("rmi://localhost:1090/daomachine");
-
+           
+            
+            
+            System.out.println("ss"+  ss +"ms "+ms);
             //ms.create(new Machine("RE44", "HP", 2000,ss.findById(0)));
             // IDao<Salle> ss =  (IDao<Salle>) Naming.lookup("rmi://localhost:1090/daosalle");;
             //ss.create(new Salle("Cd512"));
-            for (Salle s : ss.findAll()) {
-                System.out.println(s);
-            }
+            Salle salleP = ss.findById(1);
+            
             for (Machine m : ms.findAll()) {
-                System.out.println(m);
+                if (m.getSalle()== salleP){
+              System.out.println(m);
+                }
+           
             }
+            /*
+            for (Salle s : ss.findAll()) {
+            
+            System.out.println(s.getMachines());
+            }
+            */
 
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
