@@ -1,0 +1,3 @@
+[submodule "ServeurG7"]
+	path = ServeurG7
+	url = https://github.com/maryemelamri/serversalle.git
